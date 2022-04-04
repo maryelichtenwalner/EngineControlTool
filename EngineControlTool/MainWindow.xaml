@@ -1,0 +1,589 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EngineControlTool"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="EngineControlTool.MainWindow"
+        mc:Ignorable="d"
+        Title="Engine Control Gauge View" Height="600" Width="1100" Top="50" Left="50"
+        xmlns:gauge ="clr-namespace:Syncfusion.UI.Xaml.Gauges;assembly=Syncfusion.SfGauge.Wpf"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <local:ViewModel x:Key="viewModel"/>
+        <Style x:Key="TextBoxTheme" TargetType="TextBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="Background" Value="#4a4a4a"/>
+                    <Setter Property="IsEnabled" Value="True"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="Background" Value="#bfbfbf"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BackgroundTheme" TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="Background" Value="#2e2e2e"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="Background" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LabelTheme" TargetType="Label">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ButtonTheme" TargetType="Button">
+            <Setter Property="BorderThickness" Value="3"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="#4a4a4a"/>
+                    <Setter Property="BorderBrush" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="#bfbfbf"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{Binding Accent_Color_String}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FFD0A663"/>
+                    <Setter Property="BorderBrush" Value="#FF794937"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="GroupBoxTheme" TargetType="GroupBox">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Margin" Value="5"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Margin" Value="5"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PointerTheme" TargetType="gauge:CircularPointer">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="0">
+                    <Setter Property="NeedlePointerStroke" Value="White"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Color_Theme}" Value="1">
+                    <Setter Property="NeedlePointerStroke" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="GaugeTheme" TargetType="gauge:CircularScale">
+            <Setter Property="RimStrokeThickness" Value="3"/>
+            <Setter Property="FontFamily" Value="Spectral"/>
+            <Setter Property="MinorTicksPerInterval" Value="5"/>
+            <Setter Property="LabelPosition" Value="Custom"/>
+            <Setter Property="LabelOffset" Value="0.6"/>
+            <Setter Property="TickStrokeThickness" Value="1"/>
+            <Setter Property="SmallTickStrokeThickness" Value="0.5"/>
+            <Setter Property="TickLength" Value="10"/>
+            <Setter Property="SmallTickLength" Value="5"/>
+            <Setter Property="LabelStroke" Value="#FFACACAC"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="0">
+                    <Setter Property="RimStroke" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="1">
+                    <Setter Property="RimStroke" Value="Orange"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="2">
+                    <Setter Property="RimStroke" Value="Yellow"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="3">
+                    <Setter Property="RimStroke" Value="Green"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="4">
+                    <Setter Property="RimStroke" Value="#36f5ff"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="5">
+                    <Setter Property="RimStroke" Value="Purple"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="6">
+                    <Setter Property="RimStroke" Value="#ff00e6"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="7">
+                    <Setter Property="RimStroke" Value="#bfa900"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MenuTheme" TargetType="Menu">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="0">
+                    <Setter Property="Background" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="1">
+                    <Setter Property="Background" Value="Orange"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="2">
+                    <Setter Property="Background" Value="Yellow"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="3">
+                    <Setter Property="Background" Value="Green"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="4">
+                    <Setter Property="Background" Value="#36f5ff"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="5">
+                    <Setter Property="Background" Value="Purple"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="6">
+                    <Setter Property="Background" Value="#ff00e6"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Accent_Color}" Value="7">
+                    <Setter Property="Background" Value="#bfa900"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MenuItemTheme" TargetType="MenuItem">
+            <Setter Property="FontSize" Value="20"/>
+            
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SubMenuItemTheme" TargetType="MenuItem">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <ControlTemplate x:Key="ButtonBaseControlTemplate1" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <!--<Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF3C7FB1"/>
+                </Trigger>-->
+                <!--<Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFC4E5F6"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF2C628B"/>
+                </Trigger>-->
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                    <Setter Property="Foreground" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <!--**************************************************************************************
+    Main grid
+    ***************************************************************************************-->
+    <Grid DataContext="{StaticResource viewModel}" Style="{StaticResource BackgroundTheme}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="19*"/>
+        </Grid.RowDefinitions>
+
+        <!--**********************************************************************************
+        Menu bar
+        ***********************************************************************************-->
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top" Height="Auto" Style="{StaticResource MenuTheme}">
+                <MenuItem x:Name="Excel_Button" Header="Excel" FontWeight="Black" Style="{StaticResource MenuItemTheme}" Click="Excel_Button_Click"/>
+                <MenuItem x:Name="Theme_ComboBox" Header="Mode" Style="{StaticResource MenuItemTheme}">
+                    <MenuItem x:Name="DarkItem" Style="{StaticResource SubMenuItemTheme}" Header="Dark Mode" Click="DarkItem_Selected"/>
+                    <MenuItem x:Name="LightItem" Style="{StaticResource SubMenuItemTheme}" Header="Light Mode" Click="LightItem_Selected"/>
+                </MenuItem>
+                <MenuItem x:Name="Accent_ComboBox" Header="Color" Style="{StaticResource MenuItemTheme}">
+                    <MenuItem x:Name="RedItem" Style="{StaticResource SubMenuItemTheme}" Header="Red" Click="RedItem_Selected"/>
+                    <MenuItem x:Name="OrangeItem" Style="{StaticResource SubMenuItemTheme}" Header="Orange" Click="OrangeItem_Selected"/>
+                    <MenuItem x:Name="YellowItem" Style="{StaticResource SubMenuItemTheme}" Header="Yellow" Click="YellowItem_Selected"/>
+                    <MenuItem x:Name="GreenItem" Style="{StaticResource SubMenuItemTheme}" Header="Green" Click="GreenItem_Selected"/>
+                    <MenuItem x:Name="BlueItem" Style="{StaticResource SubMenuItemTheme}" Header="Blue" Click="BlueItem_Selected"/>
+                    <MenuItem x:Name="PurpleItem" Style="{StaticResource SubMenuItemTheme}" Header="Purple" Click="PurpleItem_Selected"/>
+                    <MenuItem x:Name="PinkItem" Style="{StaticResource SubMenuItemTheme}" Header="Pink" Click="PinkItem_Selected"/>
+                    <MenuItem x:Name="GoldItem" Style="{StaticResource SubMenuItemTheme}" Header="Gold" Click="GoldItem_Selected"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <!--**********************************************************************************
+        Body grid
+        ***********************************************************************************-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Temperature groupbox-->
+            <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"  Header="Temperature (ºF)" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1" Grid.Column="1" Content="Ambient" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <Label Grid.Row="5" Grid.Column="1" Content="Compressed" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <Label Grid.Row="9" Grid.Column="1" Content="Chamber" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <Label Grid.Row="13" Grid.Column="1" Content="Exhaust" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="AmbientTemp_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = tempAmbient, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Row="6" Grid.Column="1" x:Name="CompressedTemp_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = tempCompressed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Row="10" Grid.Column="1" x:Name="ChamberTemp_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = tempChamber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Row="14" Grid.Column="1" x:Name="ExhaustTemp_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = tempExhaust, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <!--Ambient temperature gauge-->
+                    <gauge:SfCircularGauge Grid.Row="0" Grid.RowSpan="4" x:Name="AmbientTemp_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Temp (ºF)" GaugeHeaderPosition="0.23, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="60" EndValue="90" Interval="5" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=tempAmbient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                    <!--Compressed temperature gauge-->
+                    <gauge:SfCircularGauge Grid.Row="4" Grid.RowSpan="4" x:Name="CompressedTemp_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Temp (ºF)" GaugeHeaderPosition="0.23, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="60" EndValue="200" Interval="20" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=tempCompressed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                    <!--Chamber temperature gauge-->
+                    <gauge:SfCircularGauge Grid.Row="8" Grid.RowSpan="4" x:Name="ChamberTemp_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Temp (ºF)" GaugeHeaderPosition="0.23, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="60" EndValue="2200" Interval="500" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=tempChamber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                    <!--Exhaust temperature gauge-->
+                    <gauge:SfCircularGauge Grid.Row="12" Grid.RowSpan="4" x:Name="ExhaustTemp_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Temp (ºF)" GaugeHeaderPosition="0.23, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="60" EndValue="2200" Interval="500" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=tempExhaust, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Pressure groupbox-->
+            <GroupBox Grid.Column="1" Grid.RowSpan="2" Header="Pressure (psi)" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1" Grid.Column="1" Content="Ambient" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <Label Grid.Row="5" Grid.Column="1" Content="Compressed" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="AmbientPressure_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = pressureAmbient, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Grid.Row="6" Grid.Column="1" x:Name="CompressedPressure_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding Path = pressureCompressed, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <!--Ambient pressure gauge-->
+                    <gauge:SfCircularGauge Grid.Row="0" Grid.RowSpan="4" x:Name="AmbientPressure_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Pressure (psi)" GaugeHeaderPosition="0.20, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="0" EndValue="50" Interval="10" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=pressureAmbient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                    <!--Compressed pressure gauge-->
+                    <gauge:SfCircularGauge Grid.Row="4" Grid.RowSpan="4" x:Name="CompressedPressure_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Pressure (psi)" GaugeHeaderPosition="0.20, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="0" EndValue="50" Interval="10" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=pressureCompressed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Humidity groupbox-->
+            <GroupBox Grid.Column="2" Header="Humidity (%)" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1" Grid.Column="1" Content="Ambient" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="AmbientHum_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding humidity}"/>
+
+                    <!--Humidity gauge-->
+                    <gauge:SfCircularGauge Grid.Row="0" Grid.RowSpan="4" x:Name="Humidity_Gauge" HeaderAlignment="Custom" GaugeHeader="Ambient Humidity (%)" GaugeHeaderPosition="0.2, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="0" EndValue="100" Interval="20" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=humidity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Shaft speed groupbox-->
+            <GroupBox Grid.Column="3" Header="Shaft Speed (RPM)" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1" Grid.Column="1" Content="Turbine" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <Label Grid.Row="2" Grid.Column="1" x:Name="ShaftSpeed_Box" Height="30" Style="{StaticResource LabelTheme}" Content="{Binding shaftSpeed}"/>
+
+                    <!--Shaft speed gauge-->
+                    <gauge:SfCircularGauge Grid.Row="0" Grid.RowSpan="4" x:Name="ShaftSpeed_Gauge" HeaderAlignment="Custom" GaugeHeader="Shaft Speed (RPM)" GaugeHeaderPosition="0.23, 1.1" HorizontalAlignment="Center">
+
+                        <gauge:SfCircularGauge.Scales>
+                            <gauge:CircularScale RadiusFactor="1" StartValue="0" EndValue="6000" Interval="2000" Style="{StaticResource GaugeTheme}">
+                                <gauge:CircularScale.Pointers>
+                                    <gauge:CircularPointer Style="{StaticResource PointerTheme}" Value="{Binding Path=shaftSpeed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </gauge:CircularScale.Pointers>
+                            </gauge:CircularScale>
+                        </gauge:SfCircularGauge.Scales>
+
+                    </gauge:SfCircularGauge>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Flow Rate groupbox-->
+            <GroupBox Grid.Row="1" Grid.Column="2" Header="Flow Rate (idk)" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="Flow Rate" VerticalAlignment="Center" Style="{StaticResource LabelTheme}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="FlowRate_Box" Height="30" Style="{StaticResource TextBoxTheme}" TextChanged="FlowRate_Box_TextChanged"/>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Log groupbox-->
+            <GroupBox Grid.Row="1" Grid.Column="3" Header="Log" Style="{StaticResource GroupBoxTheme}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="Enter log message." HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource LabelTheme}" />
+                    <Button x:Name="Log_Button" Grid.Row="2" Grid.Column="1" Content="Log" VerticalAlignment="Center" Style="{StaticResource ButtonTheme}" Template="{DynamicResource ButtonBaseControlTemplate1}" Click="Log_Button_Click"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="Log_Box" Height="30" Style="{StaticResource TextBoxTheme}" Text="{Binding Path = logNote, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Warning label-->
+            <Grid x:Name="WarningGrid" Margin="30" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="4" Background="#fffb7d">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding isDangerous}" Value="false">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding isDangerous}" Value="true">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" FontSize="150" Content="WARNING!" HorizontalAlignment="Center" Foreground="Red">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding showWarning}" Value="0">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding showWarning}" Value="1">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+
+                <Label Grid.Row="1" FontSize="75" Content="Shut off propane." HorizontalAlignment="Center" Foreground="Red"/>
+                <Label Grid.Row="2" FontSize="50" Content="Temperature or pressure too high." HorizontalAlignment="Center" Foreground="Red"/>
+
+            </Grid>
+
+
+        </Grid>
+
+    </Grid>
+</Window>
