@@ -136,7 +136,7 @@ namespace EngineControlTool
                     }
                     catch
                     {
-                        // Do Nothing
+                        port = port1;
                     }
                 }
             }
