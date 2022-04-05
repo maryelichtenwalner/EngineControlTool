@@ -69,7 +69,7 @@ namespace EngineControlTool
         }
 
         //*****************************************************************************************
-        // Method 2-11. Methods to change colors in GUI. Dark or light mode, accent color
+        // Methods 2-11. Methods to change colors in GUI. Dark or light mode, accent color
         //*****************************************************************************************
         // Set correct variable in viewModel to corresponding color based on user selection
         //*****************************************************************************************
