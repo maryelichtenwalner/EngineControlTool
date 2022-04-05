@@ -53,7 +53,7 @@ namespace EngineControlTool
         }
 
         //*****************************************************************************************
-        // Method 3. Generate Excel spreadsheet with metric values
+        // Method 3. Generate Excel spreadsheet with metric values (Celsius and pascals)
         //*****************************************************************************************
         public void generateMetricExcel(List<string> timeList, List<double> tCompressed, List<double> tChamber, List<double> tExhaust,
             List<double> pAmbient, List<double> pCompressed, List<double> tAmbient, List<double> humidity, List<double> shaftSpeed,
@@ -65,7 +65,7 @@ namespace EngineControlTool
             xlSheet1.Range["A1", "B1"].Merge();
             xlSheet1.Cells[1, 1] = "Time Stamps";
             xlSheet1.Cells[1, 3] = "Temperature (ºC)";
-            xlSheet1.Cells[1, 7] = "Pressure (psi)";
+            xlSheet1.Cells[1, 7] = "Pressure (Pa)";
             xlSheet1.Cells[1, 9] = "Humidity (%)";
             xlSheet1.Cells[1, 10] = "Shaft Speed (RPM)";
             xlSheet1.Cells[1, 11] = "Flow Rate (idk)";
