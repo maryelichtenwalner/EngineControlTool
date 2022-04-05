@@ -1,7 +1,7 @@
 ﻿<!--***********************************************************************************************
     Main window designer
     Written by Mary Lichtenwalner
-    Last Update: April 4, 2022
+    Last Update: April 5, 2022
 ************************************************************************************************-->
     
     <Window
@@ -12,7 +12,7 @@
         xmlns:local="clr-namespace:EngineControlTool"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="EngineControlTool.MainWindow"
         mc:Ignorable="d"
-        Title="Engine Control Gauge View" Height="600" Width="1100" Top="50" Left="50"
+        Title="Engine Control Tool" Height="600" Width="1100" Top="50" Left="50"
         xmlns:gauge ="clr-namespace:Syncfusion.UI.Xaml.Gauges;assembly=Syncfusion.SfGauge.Wpf"
         Loaded="Window_Loaded">
 
