@@ -526,7 +526,7 @@
             </GroupBox>
 
             <!--Flow Rate groupbox-->
-            <GroupBox Grid.Row="1" Grid.Column="2" Header="Flow Rate (idk)" Style="{StaticResource GroupBoxTheme}">
+            <GroupBox Grid.Row="1" Grid.Column="2" Header="Flow Rate (lb/in)" Style="{StaticResource GroupBoxTheme}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
