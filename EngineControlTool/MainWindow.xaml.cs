@@ -359,8 +359,8 @@ namespace EngineControlTool
         private void WarningChecker()
         {
             // Limits on temperature and pressure (degrees Fahrenheit and psi)
-            double tempLimit = 3000;
-            double pressureLimit = 5000;
+            double tempLimit = 2200;
+            double pressureLimit = 50;
 
             // Constantly checking
             while (true)
