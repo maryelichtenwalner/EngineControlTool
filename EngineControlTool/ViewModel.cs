@@ -275,5 +275,13 @@ namespace EngineControlTool
             get { return _showWarning; }
             set { _showWarning = value; onPropertyChange(nameof(showWarning)); }
         }
+
+        // Integer that designates if it is a temperature or a pressure that is too high
+        private int _tempOrPressure;
+        public int tempOrPressure
+        {
+            get { return _tempOrPressure; }
+            set { _tempOrPressure = value; onPropertyChange(nameof(tempOrPressure)); }
+        }
     }
 }

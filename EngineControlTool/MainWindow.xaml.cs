@@ -319,18 +319,26 @@ namespace EngineControlTool
         //*****************************************************************************************
         private void Excel_Button_Click(object sender, RoutedEventArgs e)
         {
-            // Call method to initialize the Excel application
-            createExcel.startUpExcel();
+            try
+            {
+                // Call method to initialize the Excel application
+                createExcel.startUpExcel();
 
-            // Create the first spreadsheet with recorded values taken from the viewModel
-            createExcel.generateExcel(viewModel.timeList, viewModel.tCompressedList, viewModel.tChamberList, viewModel.tExhaustList,
-                viewModel.pAmbientList, viewModel.pCompressedList, viewModel.tAmbientList, viewModel.humidityList, viewModel.shaftSpeedList,
-                viewModel.logList);
+                // Create the first spreadsheet with recorded values taken from the viewModel
+                createExcel.generateExcel(viewModel.timeList, viewModel.tCompressedList, viewModel.tChamberList, viewModel.tExhaustList,
+                    viewModel.pAmbientList, viewModel.pCompressedList, viewModel.tAmbientList, viewModel.humidityList, viewModel.shaftSpeedList,
+                    viewModel.logList);
 
-            // Create a second spreadsheet that has data in metric units (Celsius and pascals)
-            createExcel.generateMetricExcel(viewModel.timeList, viewModel.tCompressedList, viewModel.tChamberList, viewModel.tExhaustList,
-                viewModel.pAmbientList, viewModel.pCompressedList, viewModel.tAmbientList, viewModel.humidityList, viewModel.shaftSpeedList,
-                viewModel.logList);
+                // Create a second spreadsheet that has data in metric units (Celsius and pascals)
+                createExcel.generateMetricExcel(viewModel.timeList, viewModel.tCompressedList, viewModel.tChamberList, viewModel.tExhaustList,
+                    viewModel.pAmbientList, viewModel.pCompressedList, viewModel.tAmbientList, viewModel.humidityList, viewModel.shaftSpeedList,
+                    viewModel.logList);
+            }
+            catch
+            {
+                // Do nothing
+            }
+            
         }
 
         //*****************************************************************************************
@@ -359,18 +367,25 @@ namespace EngineControlTool
         private void WarningChecker()
         {
             // Limits on temperature and pressure (degrees Fahrenheit and psi)
-            double tempLimit = 2200;
-            double pressureLimit = 50;
+            double tempLimit = 10000;
+            double pressureLimit = 10000;
 
             // Constantly checking
             while (true)
             {
-                // If any measured value is above limit, set viewModel.isDangerous to true
+                // If any temperature value is above limit, set viewModel.isDangerous to true
                 if (viewModel.tempAmbient > tempLimit || viewModel.tempCompressed > tempLimit || 
-                    viewModel.tempChamber > tempLimit || viewModel.tempExhaust > tempLimit ||
-                    viewModel.pressureAmbient > pressureLimit || viewModel.pressureCompressed > pressureLimit)
+                    viewModel.tempChamber > tempLimit || viewModel.tempExhaust > tempLimit)
                 {
                     viewModel.isDangerous = true;
+                    viewModel.tempOrPressure = 0;
+                }
+
+                // If any pressure value is above limit, set viewModel.isDangerous to true
+                else if (viewModel.pressureAmbient > pressureLimit || viewModel.pressureCompressed > pressureLimit)
+                {
+                    viewModel.isDangerous = true;
+                    viewModel.tempOrPressure = 1;
                 }
 
                 // If everything is within safe limits, set the boolean to false
