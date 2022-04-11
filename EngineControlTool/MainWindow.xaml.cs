@@ -12,7 +12,7 @@
 /// 
 /// Written by Mary Lichtenwalner
 /// 
-/// Last Update: April 10, 2022
+/// Last Update: April 11, 2022
 ///
 
 using System;
@@ -367,8 +367,8 @@ namespace EngineControlTool
         private void WarningChecker()
         {
             // Limits on temperature and pressure (degrees Fahrenheit and psi)
-            double tempLimit = 10000;
-            double pressureLimit = 10000;
+            double tempLimit = 2000;
+            double pressureLimit = 88.2;
 
             // Constantly checking
             while (true)
